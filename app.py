@@ -6,12 +6,12 @@ from sklearn.metrics import accuracy_score
 app=Flask(__name__)
 model=pickle.load(open('..\Pnuemonia_Analysis\model_training\models\RandomForest__model.pkl','rb'))
 
-#home
+#home page
 @app.route('/')
 def home():
     return render_template("index.html")
 
-
+#Preddict page
 @app.route('/predict',methods=['POST'])
 def predict():
     int_features = [x for x in request.form.values()]
