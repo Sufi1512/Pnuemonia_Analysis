@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="login">
+        <h1>PnuemoCare</h1>
+        <!--Age,Gender,White_Blood_Cell_Count,CRP_Level,Procalcitonin_Level,ESR_Level,Diagnosis,Cough,Shortness of Breath,Chest Pain,Chills,Fatigue,Productive Cough-->
+
+        <form action="{{ url_for('predict')}}" method="post">
+            <input type="text" name="Name" placeholder="Name" required="required" /><br>
+            <input type="text" name="Gender" placeholder="Gender" required="required" /><br>
+            <input type="number" name="White Blood Cell Count" placeholder="White Blood Cell Count" min="10" max="100" required="required" /><br>
+            <input type="number" name="CRP Level" placeholder="CRP Level" min="10" max="100" required="required" /><br>
+            <input type="number" name="Procalcitonin level" placeholder="Procalcitonin level" min="10" max="100" required="required" /><br>
+            <input type="number" name="ESR Level" placeholder="ESR Level" min="10" max="100" required="required" /><br>
+            <input type="checkbox" name="Cough"/>
+            <label for="Cough">Cough</label><br>
+            <input type="checkbox" name="Shortness of Breath" />
+            <label for="Shortness of Breath">Shortness of Breath</label><br>
+            <input type="checkbox" name="Chest Pain" />
+            <label for="Chest Pain">Chest Pain</label><br>
+            <input type="checkbox" name="Chills" />
+            <label for="Chills">Chills</label><br>
+            <input type="checkbox" name="Fatigue" />
+            <label for="Fatigue">Fatigue</label><br>
+            <input type="checkbox" name="Productive Cough" />
+            <label for="Productive Cough">Productive Cough</label><br>
+            <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+        </form>
+    
+        <br>
+        <br>
+        {{ prediction_text }}
+</body>
+</html>
