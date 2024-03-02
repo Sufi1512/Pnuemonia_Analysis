@@ -4,6 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Upload and Detect</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            margin: 50px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        #uploadForm {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: hsl(45, 75%, 91%);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #detectionResult {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
 
@@ -30,11 +80,33 @@
             .then(data => {
                 // Handle the detection result
                 var resultElement = document.getElementById("detectionResult");
-                resultElement.textContent = "Detection Result: " + JSON.stringify(data);
+                // Assuming 'data' is your result array
+
+
+// Calculate the total scores for 'NORMAL' and 'PNEUMONIA'
+const normalScore = data.find(item => item.label === 'NORMAL').score;
+const pneumoniaScore = data.find(item => item.label === 'PNEUMONIA').score;
+
+// Determine the color based on the scores
+const color = normalScore > pneumoniaScore ? 'green' : 'red';
+
+// Create a formatted result string
+const formattedResult = data.map(item => `${item.label}: ${item.score.toFixed(2)}`).join(', ');
+
+// Set the text content and color of the resultElement
+resultElement.textContent = `Detection Result: [${formattedResult}]`;
+resultElement.style.color = color;
+
+
+
+
+                
+
             })
             .catch(error => console.error("Error:", error));
         }
     </script>
+    <a href="/gemini"><button>Detect</button></a>
 
 </body>
 </html>
