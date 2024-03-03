@@ -41,7 +41,7 @@ model = genai.GenerativeModel(
 uploads_dir = os.path.join(app.instance_path, 'uploads')
 os.makedirs(uploads_dir, exist_ok=True)
 
-model = pickle.load(open('..\Pnuemonia_Analysis\model_training\models\RandomForest__model.pkl', 'rb'))
+predict_model = pickle.load(open('..\Pnuemonia_Analysis\model_training\models\RandomForest__model.pkl', 'rb'))
 
 #home
 @app.route('/')
@@ -56,8 +56,8 @@ def predict():
     print(int_features_cleaned)
     final_features = [np.array(int_features_cleaned)]
     print('final_features', final_features)
-    prediction = model.predict_proba(final_features)
-    confidence = dict(zip(model.classes_, prediction[0] * 100))
+    prediction = predict_model.predict_proba(final_features)
+    confidence = dict(zip(predict_model.classes_, prediction[0] * 100))
     max_key = max(confidence, key=confidence.get)
     max_value = confidence[max_key]
     result = {max_key: max_value}
