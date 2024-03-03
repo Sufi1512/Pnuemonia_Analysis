@@ -53,6 +53,20 @@
             font-size: 16px;
             color: #333;
         }
+
+        #chat_btn {
+    width: 200px;
+    padding: 10px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+#chat_btn:hover {
+    background-color: #45a049;
+} 
     </style>
 </head>
 <body>
@@ -63,7 +77,7 @@
         <label for="imageUpload">Select image:</label>
         <input type="file" id="imageUpload" name="image" accept="image/jpeg">
 
-        <button type="button" onclick="detectImage()">Detect</button>
+        <button id="chat_btn" type="button" onclick="detectImage()">Detect</button>
         <p id="detectionResult"></p>
     </form>
 
@@ -106,7 +120,7 @@ resultElement.style.color = color;
             .catch(error => console.error("Error:", error));
         }
     </script>
-    <a href="/gemini"><button>Detect</button></a>
+    <a href="/gemini"><button id="chat_btn">Do Chat</button></a>
 
 </body>
 </html>
