@@ -7,6 +7,7 @@
     <script src="script.js"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
     <div class="login">
         <h1>PnuemoCare</h1>
@@ -65,11 +66,14 @@
             </select><br>
         
             <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+
         </form>
+      
 
 
         <br>
         <br>
         {{ prediction_text }}
+        <a href="/detect"><button type="submit " id="detect_img">Detect via Image</button></a>
 </body>
 </html>

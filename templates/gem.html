@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenAI Chat</title>
+</head>
+<body>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #chatHistory {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #fff;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 60%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+
+
+    <div class="container">
+        <h1>PnuemoCare Chat</h1>
+        <div id="chatHistory"></div>
+        <label for="userInput">Enter your message:</label>
+        <input type="text" id="userInput" required>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var userInput = document.getElementById("userInput").value;
+            var outputDiv = document.getElementById("chatHistory");
+
+            fetch('/api/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'user_input': userInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display user message
+                outputDiv.innerHTML += "<p><strong>You:</strong> " + userInput + "</p>";
+                // Display GenAI's response
+                outputDiv.innerHTML += "<p><strong>PC:</strong> " + data.genai_response + "</p>";
+                // Clear input field
+                document.getElementById("userInput").value = "";
+            });
+        }
+    </script>
+</div>
+
+</body>
+</html>

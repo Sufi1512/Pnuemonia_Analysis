@@ -47,3 +47,16 @@
 .login form button[type="submit"]:hover {
     background-color: #45a049;
 }
+#detect_img {
+    width: 100%;
+    padding: 10px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+#detect_img:hover {
+    background-color: #45a049;
+}   
