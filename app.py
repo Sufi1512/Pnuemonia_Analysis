@@ -43,19 +43,13 @@ os.makedirs(uploads_dir, exist_ok=True)
 
 model = pickle.load(open('..\Pnuemonia_Analysis\model_training\models\RandomForest__model.pkl', 'rb'))
 
-def query(model_url, api_key, filename):
-    API_URL = model_url
-    headers = {"Authorization": f"Bearer {api_key}"}
-    with open(filename, "rb") as f:
-        data = f.read()
-    response = requests.post(API_URL, headers=headers, data=data)
-    return response.json()
-
+#home
 @app.route('/')
 def home():
     return render_template("index.html")
 
-@app.route('/predict', methods=['POST'])
+
+@app.route('/predict',methods=['POST'])
 def predict():
     int_features = [x for x in request.form.values()]
     int_features_cleaned = [int(x) if x.isdigit() else 0 for x in int_features[2:]]
