@@ -1,4 +1,4 @@
-# app.py
+
 
 from flask import Flask, render_template, request, jsonify
 from werkzeug.utils import secure_filename
@@ -102,22 +102,6 @@ def detect():
 @app.route('/gemini', methods=['GET', 'POST'])
 def gemini():
     return render_template('gem.html')
-# @app.route('/api/send_message', methods=['POST'])
-# def send_message():
-#     user_input = request.json['user_input']
-
-#     # Check if the user's input contains keywords related to pneumonia or healthcare
-#     pneumonia_keywords = ['pneumonia', 'healthcare', 'medical']
-#     if any(keyword in user_input.lower() for keyword in pneumonia_keywords):
-#         # Process the request and get a response related to pneumonia or healthcare
-#         convo = model.start_chat(history=[])
-#         convo.send_message(user_input)
-#         genai_response = convo.last.text
-#     else:
-#         # If the question is not related to pneumonia or healthcare, return a restricted response
-#         genai_response = "I'm sorry, I can only provide information related to pneumonia and healthcare."
-
-#     return jsonify({'genai_response': genai_response})
 @app.route('/api/send_message', methods=['POST'])
 def send_message():
     user_input = request.json['user_input']
@@ -139,7 +123,7 @@ def send_message():
         convo = model.start_chat(history=[])
         convo.send_message(user_input)
         genai_response = convo.last.text
-    
+        print(user_input)
     else:
         # If the question is not related to pneumonia or healthcare, return a restricted response
         genai_response = "I'm sorry, I can only provide information related to pneumonia and healthcare."

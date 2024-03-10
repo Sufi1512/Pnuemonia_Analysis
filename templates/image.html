@@ -54,19 +54,35 @@
             color: #333;
         }
 
+        .loading-spinner {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #imagePreview {
+            display: none;
+            margin-top: 20px;
+        }
+
         #chat_btn {
-    width: 200px;
-    padding: 10px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-#chat_btn:hover {
-    background-color: #45a049;
-} 
+            width: 200px;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #chat_btn:hover {
+            background-color: #45a049;
+        }
+
+        #uploadMessage {
+            color: blue ;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -79,12 +95,50 @@
 
         <button id="chat_btn" type="button" onclick="detectImage()">Detect</button>
         <p id="detectionResult"></p>
+        <div class="loading-spinner">Loading...</div>
+
+        <!-- Image preview after prediction -->
+        <div id="imagePreview"></div>
+
+        <!-- Upload success message -->
+        <div id="uploadMessage"></div>
     </form>
 
     <script>
+        // Display the uploaded image and success message when the file input changes
+        document.getElementById("imageUpload").addEventListener("change", function () {
+            var imagePreview = document.getElementById("imagePreview");
+            var uploadedImage = this.files[0];
+            var imageUrlBefore = URL.createObjectURL(uploadedImage);
+            imagePreview.innerHTML = `<img src="${imageUrlBefore}" alt="Uploaded Image" style="max-width: 100%; max-height: 200px;">`;
+            imagePreview.style.display = "block";
+
+            // Display upload success message
+            var uploadMessage = document.getElementById("uploadMessage");
+            uploadMessage.textContent = "Image uploaded successfully!";
+            uploadMessage.style.display = "block";
+        });
+
         function detectImage() {
             var form = document.getElementById("uploadForm");
             var formData = new FormData(form);
+
+            // Show loading spinner during the detection process
+            var loadingSpinner = document.querySelector(".loading-spinner");
+            loadingSpinner.style.display = "block";
+
+            // Hide previous messages
+            var detectionResult = document.getElementById("detectionResult");
+            detectionResult.textContent = "";
+            detectionResult.style.color = 'black';
+
+            // Display the uploaded image before prediction
+            var imagePreview = document.getElementById("imagePreview");
+            imagePreview.style.display = "none";
+
+            // Hide the upload success message
+            var uploadMessage = document.getElementById("uploadMessage");
+            uploadMessage.style.display = "none";
 
             fetch("/detect", {
                 method: "POST",
@@ -92,32 +146,38 @@
             })
             .then(response => response.json())
             .then(data => {
+                // Hide loading spinner when the response is received
+                loadingSpinner.style.display = "none";
+
                 // Handle the detection result
-                var resultElement = document.getElementById("detectionResult");
-                // Assuming 'data' is your result array
+                if (data && data.length > 0) {
+                    // Calculate the total scores for 'NORMAL' and 'PNEUMONIA'
+                    const normalScore = data.find(item => item.label === 'NORMAL').score;
+                    const pneumoniaScore = data.find(item => item.label === 'PNEUMONIA').score;
 
+                    // Determine the color based on the scores
+                    const color = normalScore > pneumoniaScore ? 'green' : 'red';
 
-// Calculate the total scores for 'NORMAL' and 'PNEUMONIA'
-const normalScore = data.find(item => item.label === 'NORMAL').score;
-const pneumoniaScore = data.find(item => item.label === 'PNEUMONIA').score;
+                    // Create a formatted result string
+                    const formattedResult = data.map(item => `${item.label}: ${item.score.toFixed(2)}`).join(', ');
 
-// Determine the color based on the scores
-const color = normalScore > pneumoniaScore ? 'green' : 'red';
+                    // Set the text content and color of the resultElement
+                    detectionResult.textContent = `Detection Result: [${formattedResult}]`;
+                    detectionResult.style.color = color;
 
-// Create a formatted result string
-const formattedResult = data.map(item => `${item.label}: ${item.score.toFixed(2)}`).join(', ');
-
-// Set the text content and color of the resultElement
-resultElement.textContent = `Detection Result: [${formattedResult}]`;
-resultElement.style.color = color;
-
-
-
-
-                
-
+                    // Display the uploaded image after prediction
+                    imagePreview.style.display = "block";
+                    imagePreview.innerHTML = `<img src="${imageUrlBefore}" alt="Uploaded Image (After)" style="max-width: 100%; max-height: 200px;">`;
+                } else {
+                    detectionResult.textContent = "No valid detection result received.";
+                    detectionResult.style.color = 'black';
+                }
             })
-            .catch(error => console.error("Error:", error));
+            .catch(error => {
+                console.error("Error:", error);
+                // Hide loading spinner in case of an error
+                loadingSpinner.style.display = "none";
+            });
         }
     </script>
     <a href="/gemini"><button id="chat_btn">Do Chat</button></a>
